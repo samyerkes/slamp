@@ -1,29 +1,29 @@
 <?php
 
 /**
-* Example for a simple cas 2.0 client
-*
-* PHP Version 5
-*
-* @file example_simple.php
-* @category Authentication
-* @package PhpCAS
-* @author Joachim Fritschi <jfritschi@freenet.de>
-* @author Adam Franco <afranco@middlebury.edu>
-* @license http://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0
-* @link https://wiki.jasig.org/display/CASC/phpCAS
-*/
+ * Example for overriding validation urls
+ *
+ * PHP Version 5
+ *
+ * @file     example_custom_urls.php
+ * @category Authentication
+ * @package  PhpCAS
+ * @author   Joachim Fritschi <jfritschi@freenet.de>
+ * @author   Adam Franco <afranco@middlebury.edu>
+ * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
+ * @link     https://wiki.jasig.org/display/CASC/phpCAS
+ */
 
+// Load the settings from the central config file
 require_once 'config.php';
+// Load the CAS lib
+require_once $phpcas_path . '/CAS.php';
 
-require_once $phpcas_path . 'CAS.php'; 
-
-// Uncomment to enable debugging
-// phpCAS::setDebug();
+// Enable debugging
+phpCAS::setDebug();
 
 // Initialize phpCAS
-// phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
-phpCAS::client(CAS_VERSION_1_0, $cas_host, $cas_port, $cas_context);
+phpCAS::client(CAS_VERSION_2_0, $cas_host, $cas_port, $cas_context);
 
 // For production use set the CA certificate that is the issuer of the cert
 // on the CAS server and uncomment the line below
@@ -33,6 +33,13 @@ phpCAS::client(CAS_VERSION_1_0, $cas_host, $cas_port, $cas_context);
 // THIS SETTING IS NOT RECOMMENDED FOR PRODUCTION.
 // VALIDATING THE CAS SERVER IS CRUCIAL TO THE SECURITY OF THE CAS PROTOCOL!
 phpCAS::setNoCasServerValidation();
+
+// Override the validation url for any (ST and PT) CAS 2.0 validation
+phpCAS::setServerProxyValidateURL('https://cas.example.org:1443/proxyValidate');
+// Override the validation url for any CAS 1.0 validation
+//phpCAS::setServerServiceValidateURL('https://cas.example.org:1443/serviceValidate');
+//Override the validation url for any SAML11 validation
+//phpCAS::setServerSamlValidateURL('https://cas.example.org:1443/samlValidate');
 
 // force CAS authentication
 phpCAS::forceAuthentication();
